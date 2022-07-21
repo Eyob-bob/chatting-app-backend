@@ -58,7 +58,13 @@ const resolvers = {
     },
   },
   Query: {
-    user: async (_, { id }) => await User.findById(id),
+    user: async (_, __, { isAuth, user_id }) => {
+      if (isAuth) {
+        return await User.findById(user_id);
+      }
+
+      throw new ApolloError("User is not authenticated");
+    },
   },
 };
 
