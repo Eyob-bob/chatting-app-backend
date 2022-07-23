@@ -2,9 +2,35 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("./models/User");
 const { ApolloError } = require("apollo-server-express");
+const Message = require("./models/Message");
 
 const resolvers = {
   Mutation: {
+    async saveMessage(
+      _,
+      { saveMessageInput: { text, senderEmail, recieverEmail } }
+    ) {
+      const newMessage = new Message({
+        text,
+        senderEmail,
+        recieverEmail,
+      });
+
+      const senderUser = await User.findOne({ email: senderEmail });
+      if (!senderUser)
+        throw new ApolloError("Sender not found", "SENDER NOT FOUND");
+
+      const recieverUser = await User.findOne({ email: recieverEmail });
+      if (!recieverUser)
+        throw new ApolloError("Reciever not found", "RECIEVER NOT FOUND");
+
+      if (senderEmail === recieverEmail)
+        throw new ApolloError("Cannot send to the same email", "SAME EMAIL");
+
+      const message = await newMessage.save();
+
+      return message;
+    },
     async registerUser(_, { registerInput: { username, email, password } }) {
       const oldUser = await User.findOne({ email });
 
@@ -38,6 +64,10 @@ const resolvers = {
     },
     async loginUser(_, { loginInput: { email, password } }) {
       const user = await User.findOne({ email });
+
+      if (!user) {
+        throw new ApolloError("Incorrect email", "INCORRECT EMAIL");
+      }
 
       if (user && (await bcrypt.compare(password, user.password))) {
         // Create token
