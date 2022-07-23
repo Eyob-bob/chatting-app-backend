@@ -33,7 +33,7 @@ const typeDefs = gql`
 
   type Query {
     user: User
-    message: Message
+    messages(recieverEmail: String): [Message]
     users: [User]
   }
 
