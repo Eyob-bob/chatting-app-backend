@@ -95,6 +95,11 @@ const resolvers = {
 
       throw new ApolloError("User is not authenticated");
     },
+    users: async (_, __, { isAuth, user_id }) => {
+      if (isAuth) return await User.find();
+
+      throw new ApolloError("User is not authenticated");
+    },
   },
 };
 
