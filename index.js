@@ -11,8 +11,6 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors());
-
 const httpServer = http.createServer(app);
 const server = new ApolloServer({
   typeDefs,
@@ -49,11 +47,11 @@ const server = new ApolloServer({
 
 mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true }, async () => {
   await server.start();
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, path: "/" });
   await new Promise((resolve) =>
     httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
   );
   console.log(
-    `🚀 Server ready at https://eyob-chatting-app-backend.herokuapp.com/${server.graphqlPath}`
+    `🚀 Server ready at https://eyob-chatting-app-backend.herokuapp.com${server.graphqlPath}`
   );
 });
