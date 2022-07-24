@@ -13,6 +13,7 @@ const app = express();
 
 const httpServer = http.createServer(app);
 const server = new ApolloServer({
+  introspection: true,
   typeDefs,
   resolvers,
   csrfPrevention: true,
