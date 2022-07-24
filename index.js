@@ -9,13 +9,12 @@ const resolvers = require("./resolvers");
 const jwt = require("jsonwebtoken");
 
 const app = express();
-
 const httpServer = http.createServer(app);
 const server = new ApolloServer({
   introspection: true,
   typeDefs,
   resolvers,
-  // csrfPrevention: true,
+  csrfPrevention: true,
   cache: "bounded",
   context: (request) => {
     const header = request.req.headers.authorization;
@@ -45,15 +44,13 @@ const server = new ApolloServer({
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-mongoose
-  .connect(process.env.MONGOURL, { useNewUrlParser: true })
-  .then(async () => {
-    await server.start();
-    server.applyMiddleware({ app, path: "/" });
-    await new Promise((resolve) =>
-      httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
-    );
-    console.log(
-      `🚀 Server ready at https://eyob-chatting-app-backend.herokuapp.com${server.graphqlPath}`
-    );
-  });
+mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true }, async () => {
+  server.applyMiddleware({ app, path: "/" });
+  await server.start();
+  await new Promise((resolve) =>
+    httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
+  );
+  console.log(
+    `🚀 Server ready at https://eyob-chatting-app-backend.herokuapp.com${server.graphqlPath}`
+  );
+});
