@@ -11,11 +11,7 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+app.use(cors());
 
 const httpServer = http.createServer(app);
 const server = new ApolloServer({
