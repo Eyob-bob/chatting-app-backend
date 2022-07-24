@@ -16,7 +16,7 @@ const server = new ApolloServer({
   introspection: true,
   typeDefs,
   resolvers,
-  csrfPrevention: true,
+  // csrfPrevention: true,
   cache: "bounded",
   context: (request) => {
     const header = request.req.headers.authorization;
@@ -47,8 +47,8 @@ const server = new ApolloServer({
 });
 
 mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true }, async () => {
-  await server.start();
   server.applyMiddleware({ app, path: "/" });
+  await server.start();
   await new Promise((resolve) =>
     httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
   );
