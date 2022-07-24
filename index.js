@@ -45,13 +45,13 @@ const server = new ApolloServer({
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true }, async () => {
+mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true }).then(() => {
   await server.start();
   server.applyMiddleware({ app, path: "/" });
   await new Promise((resolve) =>
-    httpServer.listen({ port: process.env.PORT || 4000 })
+    httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
   );
   console.log(
     `🚀 Server ready at https://eyob-chatting-app-backend.herokuapp.com${server.graphqlPath}`
   );
-});
+}) ;
