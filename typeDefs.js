@@ -12,6 +12,7 @@ const typeDefs = gql`
     text: String
     senderEmail: String
     recieverEmail: String
+    createdTime: String
   }
 
   input RegisterInput {
@@ -33,7 +34,7 @@ const typeDefs = gql`
 
   type Query {
     user: User
-    messages(recieverEmail: String): [Message]
+    messages(recieverEmail: String, senderEmail: String): [Message]
     users: [User]
   }
 

@@ -37,7 +37,6 @@ const server = new ApolloServer({
 
     // in case any error found
     if (!decodeToken) return { isAuth: false };
-
     // token decoded successfully, and extracted data
     return { isAuth: true, user_id: decodeToken.user_id };
   },

@@ -100,20 +100,21 @@ const resolvers = {
 
       throw new ApolloError("User is not authenticated");
     },
-    messages: async (_, { recieverEmail }, { isAuth, user_id }) => {
+    messages: async (
+      _,
+      { senderEmail, recieverEmail },
+      { isAuth, user_id }
+    ) => {
       if (!isAuth) throw new ApolloError("User is not authenticated");
 
-      const senderEmail = await (await User.findById(user_id)).email;
-
-      const messages = await (
-        await Message.find()
-      ).filter(
-        (message) =>
-          message.senderEmail === senderEmail &&
-          message.recieverEmail === recieverEmail
-      );
-
-      return messages;
+      const messages = await await Message.find();
+      const filteredMessages = messages.filter((message) => {
+        return (
+          message.senderEmail == senderEmail &&
+          message.recieverEmail == recieverEmail
+        );
+      });
+      return filteredMessages;
     },
   },
 };
