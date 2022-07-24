@@ -46,8 +46,8 @@ const server = new ApolloServer({
 });
 
 mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true }, async () => {
-  server.applyMiddleware({ app, path: "/" });
   await server.start();
+  server.applyMiddleware({ app, path: "/" });
   await new Promise((resolve) =>
     httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
   );
