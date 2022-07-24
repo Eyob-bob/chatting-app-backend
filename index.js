@@ -7,7 +7,6 @@ require("dotenv/config");
 const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
 const jwt = require("jsonwebtoken");
-const cors = require("cors");
 
 const app = express();
 
