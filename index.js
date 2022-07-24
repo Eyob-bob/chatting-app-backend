@@ -7,8 +7,16 @@ require("dotenv/config");
 const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
 
 const app = express();
+
+app.use(
+  cors({
+    credentials: true,
+  })
+);
+
 const httpServer = http.createServer(app);
 const server = new ApolloServer({
   typeDefs,
