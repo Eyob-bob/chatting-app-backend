@@ -14,7 +14,7 @@ const server = new ApolloServer({
   introspection: true,
   typeDefs,
   resolvers,
-  csrfPrevention: true,
+  // csrfPrevention: true,
   cache: "bounded",
   context: (request) => {
     const header = request.req.headers.authorization;
@@ -39,14 +39,17 @@ const server = new ApolloServer({
     // in case any error found
     if (!decodeToken) return { isAuth: false };
     // token decoded successfully, and extracted data
-    return { isAuth: true, user_id: decodeToken.user_id };
+    return {
+      isAuth: true,
+      user_id: decodeToken.user_id,
+    };
   },
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
 mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true }, async () => {
-  server.applyMiddleware({ app, path: "/" });
   await server.start();
+  server.applyMiddleware({ app, path: "/" });
   await new Promise((resolve) =>
     httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
   );
