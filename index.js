@@ -53,6 +53,6 @@ mongoose.connect(process.env.MONGOURL, { useNewUrlParser: true }, async () => {
     httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
   );
   console.log(
-    `🚀 Server ready at https://eyob-chatting-app-backend.herokuapp.com${server.graphqlPath}`
+    `🚀 Server ready at https://chatting-app-backend.onrender.com${server.graphqlPath}`
   );
 });
